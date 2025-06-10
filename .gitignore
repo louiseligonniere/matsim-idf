@@ -3,6 +3,8 @@ env
 cache
 output
 
+data_sources
+
 data/nantes_2015
 data/lyon_2015
 .vscode

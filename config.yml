@@ -15,14 +15,14 @@ config:
   processes: 4
 
   # Define whether to use ENTD or EGT as the household travel survey (HTS)
-  hts: entd
+  hts: emp
 
   # Define sampling rate and random seed for the output population
   sampling_rate: 0.001
   random_seed: 1234
 
   # Paths to the input data and where the output should be stored
-  data_path: /path/to/my/data
+  data_path: data_sources
   output_path: output
 
   # Only interesting if you run the simulation
@@ -33,3 +33,7 @@ config:
 
   # Uncomment to use the bhepop2 package for attributing income
   # income_assignation_method: bhepop2
+
+  output_prefix: studied_
+  comparison_file_prefix: compared_
+  analysis_from_file: true
