@@ -3,7 +3,11 @@ import numpy as np
 import data.hts.hts as hts
 
 """
-This stage cleans the the French HTS (EMP).
+This stage cleans the French HTS (EMP).
+Merge: df_households <= df_menage + df_tcm_menage
+df_persons <= df_individu, df_tcm_individu, df_tcm_individu_kish
+df_trips <= df_deploc
+Returns: df_households, df_persons, df_trips (complete EMP datasets, not filtered geographically)
 """
 
 def configure(context):
@@ -45,7 +49,7 @@ def convert_time(x):
     return np.dot(np.array(x.split(":"), dtype = float), [3600.0, 60.0, 1.0])
 
 def execute(context):
-    df_individu, df_tcm_individu,df_tcm_individu_kish, df_menage, df_tcm_menage, df_deploc = context.stage("data.hts.emp.raw")
+    df_individu, df_tcm_individu, df_tcm_individu_kish, df_menage, df_tcm_menage, df_deploc = context.stage("data.hts.emp.raw")
 
     # Make copies
     df_persons = pd.DataFrame(df_tcm_individu, copy = True).rename(columns={"ident_ind":"IDENT_IND", "ident_men":"IDENT_MEN"})
@@ -80,7 +84,7 @@ def execute(context):
     df_households["household_id"] = np.arange(len(df_households))
 
     df_persons = pd.merge(
-        df_persons, df_households[["emp_household_id", "household_id","DEP_RES"]],
+        df_persons, df_households[["emp_household_id", "household_id", "DEP_RES"]],
         on = "emp_household_id"
     )
     df_persons["person_id"] = np.arange(len(df_persons))
@@ -225,7 +229,7 @@ def execute(context):
         df_trips[df_trips["mode"] == "car_passenger"]["person_id"].unique()
     )
     
-    #Drop person without right household size 
+    # Drop person without right household size 
     df_persons = df_persons.drop(df_persons[(df_persons["number_of_trips"] == -1) & (df_persons['household_id'].isin([1647,6182,12630]))].index)
     
     # Calculate consumption units

@@ -5,7 +5,8 @@ import py7zr
 import glob
 
 """
-Loads the IRIS zoning system.
+Loads the IRIS zoning system and adds the geometry to the IRIS codes.
+Returns: table of IRIS + commune + dép + rég + geometry (every IRIS under study)
 """
 
 def configure(context):
@@ -14,7 +15,7 @@ def configure(context):
     context.stage("data.spatial.codes")
 
 def execute(context):
-    df_codes = context.stage("data.spatial.codes")
+    df_codes = context.stage("data.spatial.codes") # Table of IRIS, commune, département and région for every IRIS under study
 
     source_path = find_iris("{}/{}".format(context.config("data_path"), context.config("iris_path")))
 

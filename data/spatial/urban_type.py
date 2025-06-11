@@ -3,6 +3,11 @@ import os
 import zipfile
 import numpy as np
 
+"""
+This stages loads a file containing urban types and filters urban types for municipalities in df_municipalities.
+Returns: table of communes and urban types (communes under study).
+"""
+
 # START Money patching openpyxl to parse INSEE file
 from openpyxl.styles.colors import WHITE, RGB
 __old_rgb_set__ = RGB.__set__

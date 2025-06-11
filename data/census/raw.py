@@ -4,6 +4,7 @@ import zipfile
 
 """
 This stage loads the raw data from the French population census.
+Returns: selected columns of the census, for departements under study.
 """
 
 def configure(context):
@@ -33,7 +34,7 @@ COLUMNS_DTYPES = {
 
 def execute(context):
     df_records = []
-    df_codes = context.stage("data.spatial.codes")
+    df_codes = context.stage("data.spatial.codes") # Table of IRIS, commune, département and région for every IRIS under study
 
     requested_departements = df_codes["departement_id"].unique()
 
@@ -49,7 +50,7 @@ def execute(context):
                 for df_chunk in csv:
                     progress.update(len(df_chunk))
                     
-                    df_chunk = df_chunk[df_chunk["DEPT"].isin(requested_departements)]
+                    df_chunk = df_chunk[df_chunk["DEPT"].isin(requested_departements)] # sélection se fait sur DEPT = département du lieu de résidence
 
                     if len(df_chunk) > 0:
                         df_records.append(df_chunk)

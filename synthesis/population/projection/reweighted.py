@@ -3,6 +3,7 @@ import numpy as np
 
 """
 This stage reweights the census data set according to the projection data for a different year.
+Returns: census extracted with PROJECTED weights (suppressing old weights)
 """
 
 def configure(context):

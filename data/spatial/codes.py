@@ -6,12 +6,14 @@ import zipfile
 This stages loads a file containing all spatial codes in France and how
 they can be translated into each other. These are mainly IRIS, commune,
 departement and région.
+Keeps IRIS corresponding IDF.
+Returns: Table of IRIS, commune, département and région for every IRIS under study.
 """
 
 def configure(context):
     context.config("data_path")
 
-    context.config("regions", [11])
+    context.config("regions", [11]) # Here : we study IDF (code région = 11)
     context.config("departments", [])
     context.config("codes_path", "codes_2023/reference_IRIS_geo2023.zip")
     context.config("codes_xlsx", "reference_IRIS_geo2023.xlsx")

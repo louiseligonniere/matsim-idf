@@ -7,6 +7,8 @@ import data.hts.hts as hts
 This stage cleans the French population census:
   - Assign new unique integer IDs to households and persons
   - Clean up spatial information and sociodemographic attributes
+  - Add urban type if use_urban_type=TRUE
+Returns: extract of the census with selected AND CLEANED variables (communes under study)
 """
 
 def configure(context):
@@ -20,6 +22,7 @@ def execute(context):
     df = context.stage("data.census.raw")
 
     # Construct household IDs for persons with NUMMI != Z
+    # L'ID = num de canton-ou-ville + num du ménage dans le canton-ou-ville
     df_household_ids = df[["CANTVILLE", "NUMMI"]]
     df_household_ids = df_household_ids[df_household_ids["NUMMI"] != "Z"]
     df_household_ids["temporary"] = df_household_ids["CANTVILLE"] + df_household_ids["NUMMI"]
@@ -27,12 +30,12 @@ def execute(context):
     df_household_ids["household_id"] = np.arange(len(df_household_ids))
     df = pd.merge(df, df_household_ids, on = ["CANTVILLE", "NUMMI"], how = "left")
 
-    # Fill up undefined household ids (those where NUMMI == Z)
+    # Fill up undefined household ids (those where NUMMI == Z) (= individu hors ménage)
     f = np.isnan(df["household_id"])
     df.loc[f, "household_id"] = np.arange(np.count_nonzero(f)) + df["household_id"].max() + 1
     df["household_id"] = df["household_id"].astype(int)
 
-    # Put person IDs
+    # Put person IDs (en plus des household_id)
     df["person_id"] = np.arange(len(df))
 
     # Sorting

@@ -1,6 +1,11 @@
 import pandas as pd
 import numpy as np
 
+"""
+This script is not itself a stage.
+It defines necessary functions for hts stages (eg: hts.emp.cleaned). 
+"""
+
 def swap_departure_arrival_times(df, f):
     assert "arrival_time" in df
     assert "departure_time" in df

@@ -4,7 +4,7 @@ import geopandas as gpd
 import os
 
 """
-Provides the municipality zoning system.
+Returns: table of departements + geometry (for departements under study)
 """
 
 def configure(context):

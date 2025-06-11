@@ -5,6 +5,7 @@ import zipfile
 
 """
 This stage loads the raw data of the French HTS (EMP).
+Returns: 6 datasets: df_individu, df_tcm_individu, df_tcm_individu_kish, df_menage, df_tcm_menage, df_deploc (complete EMP datasets, not filtered geographically)
 """
 
 Q_MENAGE_COLUMNS = [ "IDENT_MEN", "pond_menC",
@@ -76,7 +77,7 @@ def execute(context):
                 sep = ",", encoding = "latin1", usecols = K_DEPLOC_COLUMNS,
                 )
         
-    return df_individu, df_tcm_individu,df_tcm_individu_kish, df_menage, df_tcm_menage, df_deploc
+    return df_individu, df_tcm_individu, df_tcm_individu_kish, df_menage, df_tcm_menage, df_deploc
 
 def validate(context):
     if not os.path.exists(f'{context.config("data_path")}/emp_2019/emp_2019_donnees_individuelles_anonymisees_novembre2024.zip'):

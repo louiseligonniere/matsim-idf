@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np
 
+"""
+Returns: HTS stage corresponding to the selected HTS
+"""
+
 def configure(context):
     hts = context.config("hts")
 

@@ -1,4 +1,8 @@
 
+"""
+Returns: income stage corresponding to the selected income assignation method
+"""
+
 def configure(context):
     method = context.config("income_assignation_method", "uniform")
 

@@ -8,12 +8,14 @@ from data.spatial.department_names import DEPARTMENTS
 
 """
 This stage loads and cleans projection data about the French population.
+Executed only if projection_year != None
+Returns: table of weights for each dép / sex / trage (for the specified projection scenario)
 """
 
 def configure(context):
     context.config("data_path")
     context.config("projection_path", "projections/donnees_detaillees_departementales.zip")
-    context.config("projection_scenario", None)
+    context.config("projection_scenario", None) # default = None si pas de projection spécifiée dans le config.yml
     context.config("projection_year", None)
 
     context.stage("data.spatial.departments")

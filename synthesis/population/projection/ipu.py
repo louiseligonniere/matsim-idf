@@ -3,6 +3,9 @@ import numpy as np
 
 """
 This stage reweights the census data set according to the projection data for a different year.
+Executed only if projection_year != None
+Done through IPU = iterative proportional updating (= adjust sampling weights to given totals based on household-level constraints)
+Returns: table of household_id's and their updated weights (corresponding to the population projection)
 """
 
 def configure(context):
