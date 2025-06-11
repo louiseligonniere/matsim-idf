@@ -29,11 +29,11 @@ config:
   java_memory: 14G
 
   # Activate if you want to run mode choice
-  mode_choice: false
+  mode_choice: true
 
   # Uncomment to use the bhepop2 package for attributing income
   # income_assignation_method: bhepop2
 
-  output_prefix: studied_
+  output_prefix: simulated_
   comparison_file_prefix: compared_
   analysis_from_file: true
