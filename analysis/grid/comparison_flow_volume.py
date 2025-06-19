@@ -16,7 +16,7 @@ def configure(context):
     context.stage("data.spatial.departments")
 
     context.config("comparison_file_prefix",None)
-    context.config("output_prefix", "ile_de_france_")
+    context.config("output_prefix", "simulated_")
     context.config("output_formats", ["csv", "gpkg"])
     context.config("output_path")
     context.config("data_path")
@@ -37,14 +37,14 @@ def stat_grid(df_trips,df_locations,df_persons,df_grid):
 def execute(context):
     
     figures = {
-        "Yrs:0-10":{"min_age": 0, "max_age": 10,},
-        "Yrs:11-14":{"min_age": 11, "max_age": 14,},
-        "Yrs:15-18":{"min_age": 15, "max_age": 17,},
-        "Yrs:18-25":{"min_age": 18, "max_age": 25,},
-        "Yrs:25-50":{"min_age": 26, "max_age": 50,},
-        "Yrs:50-65":{"min_age": 51, "max_age": 65,},
-        "Yrs:65-75":{"min_age": 66, "max_age": 75,},
-        "Yrs:75+":{"min_age": 76, "max_age": 110,},}
+        "Yrs0-10":{"min_age": 0, "max_age": 10,},
+        "Yrs11-14":{"min_age": 11, "max_age": 14,},
+        "Yrs15-18":{"min_age": 15, "max_age": 17,},
+        "Yrs18-25":{"min_age": 18, "max_age": 25,},
+        "Yrs25-50":{"min_age": 26, "max_age": 50,},
+        "Yrs50-65":{"min_age": 51, "max_age": 65,},
+        "Yrs65-75":{"min_age": 66, "max_age": 75,},
+        "Yrs75+":{"min_age": 76, "max_age": 110,},}
     comparison_file = context.config("output_prefix") if context.config("comparison_file_prefix") is None else context.config("comparison_file_prefix")
     
     if not context.config("analysis_from_file"):

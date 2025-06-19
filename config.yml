@@ -7,7 +7,11 @@ working_directory: cache
 # This section defines which parts of the pipeline should be run
 run:
   - synthesis.output # To create the output population in the output_path (see below)
-  #- matsim.output # Uncomment, if you want to run the full simulation (you'll need Java for that)
+  - matsim.output # Uncomment, if you want to run the full simulation (you'll need Java for that)
+
+  - analysis.synthesis.population # Generates tables to compare synthetic population to source data
+  - analysis.grid.comparison_flow_volume # Generates grids showing the volumes of the synthetic population (by age group and trip purpose) / 
+  # or comparing two synthetic populations if comparison_file_prefix is specified in the config section (below)
 
 # Here the configuraiton of the pipeline starts
 config:
@@ -34,6 +38,10 @@ config:
   # Uncomment to use the bhepop2 package for attributing income
   # income_assignation_method: bhepop2
 
-  output_prefix: simulated_
-  comparison_file_prefix: compared_
-  analysis_from_file: true
+  # To export detailed link geometries
+  export_detailed_network: True # Exports the detailed geometries of every network link
+
+  # Analysis pipeline
+  output_prefix: simulated_ # prefix of output files (synthetic population)
+  # comparison_file_prefix: compared_ # prefix of files to be compared with the output population
+  analysis_from_file: true # false = last synthetic population is studied
