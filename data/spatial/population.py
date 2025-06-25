@@ -3,7 +3,8 @@ import pandas as pd
 import zipfile
 
 """
-Loads aggregate population data.
+Loads aggregate population data and adds it to the dataframe of spatial codes.
+Returns: table of spatial codes + population (communes under study). 
 """
 
 def configure(context):
@@ -34,7 +35,7 @@ def execute(context):
 
     # Merge into code data and verify integrity
     df_codes = context.stage("data.spatial.codes")
-    df_population = pd.merge(df_population, df_codes, on = ["iris_id", "commune_id", "departement_id", "region_id"])
+    df_population = pd.merge(df_population, df_codes, on = ["iris_id", "commune_id", "departement_id", "region_id"]) # NB: default=inner join ie intersection of keys
 
     requested_iris = set(df_codes["iris_id"].unique())
     merged_iris = set(df_population["iris_id"].unique())

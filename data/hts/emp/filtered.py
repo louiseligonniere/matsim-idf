@@ -2,8 +2,8 @@ import data.hts.hts as hts
 import numpy as np
 
 """
-This stage filters out EGT observations which live or work outside of
-Île-de-France.
+This stage filters out EMP observations which live outside of the region under study (here: Île-de-France). 
+Returns: df_households, df_persons, df_trips, filtered on persons living in the region under study (here: IDF). 
 """
 
 def configure(context):
@@ -23,15 +23,6 @@ def execute(context):
         requested_departments = df_codes["departement_id"].unique()
         f = df_persons["departement_id"].astype(str).isin(requested_departments) # pandas bug!
         df_persons = df_persons[f]
-
-        # Filter for people going outside of the area (because they have NaN distances)
-        remove_ids = set()
-
-        remove_ids |= set(df_persons[
-            ~df_persons["departement_id"].isin(requested_departments)
-        ])
-
-        df_persons = df_persons[~df_persons["person_id"].isin(remove_ids)]
 
         # Only keep trips and households that still have a person
         df_trips = df_trips[df_trips["person_id"].isin(df_persons["person_id"].unique())]

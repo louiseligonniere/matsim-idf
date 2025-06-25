@@ -2,7 +2,8 @@ import re
 import pandas as pd
 
 """
-Creates a vehicle fleet based on a default vehicle type for the dummy passenger mode
+This stage creates a vehicle fleet based on a default vehicle type for the dummy passenger mode.
+Returns: df of passengers types (here: 1 type=default_car_passenger), df of passengers (as many as persons in the synthetic population).
 """
 
 def configure(context):

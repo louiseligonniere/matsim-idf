@@ -10,6 +10,9 @@ data we have several special cases that we need to cover:
 Based on these criteria, we can attach a random commune from the departement (which is not
 covered by IRIS) to the first case, and we can attach a random IRIS within a commune that
 has less than 200 inhabitants to the second case.
+The sample is done with probabilities proportionnal to population of each commune / IRIS.
+
+Returns: df of households and their IRIS/commune/department of residence.
 """
 
 def configure(context):

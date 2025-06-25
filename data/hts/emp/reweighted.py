@@ -1,5 +1,10 @@
 import numpy as np
 
+"""
+This stage filters out persons which were not interviewed on their trips (we keep only individu kish), and renames the accurate weights (in df_persons)
+Returns: df_households, df_persons, df_trips
+"""
+
 def configure(context):
     context.stage("data.hts.emp.filtered")
 
@@ -24,7 +29,7 @@ def execute(context):
     # 2) Override weights with the correct weights for the people which have trip information
     df_persons["person_weight"] = df_persons["trip_weight"]
 
-    # We also add a Euclidean distance, as an appxorimation and for use in the downstream algorithms
+    # We also add a Euclidean distance, as an approximation and for use in the downstream algorithms
     df_trips["euclidean_distance"] = df_trips["routed_distance"] / 1.3
 
     return df_households, df_persons, df_trips

@@ -11,6 +11,10 @@ import multiprocessing as mp
 
 """
 This stage fuses census data with HTS data.
+It uses the matching produced in synth.pop.matched to add variables on license, pt subscription, bikes
++ attaches income (from synth.pop.income.selected).
+Creates some new variables (car_availability, bike_availability, age_range for education).
+Returns: df_population ENRICHED (with income + HTS variables, excluding trip chain)
 """
 
 def configure(context):
@@ -67,7 +71,7 @@ def execute(context):
     assert initial_person_ids == final_person_ids
     assert initial_household_ids == final_household_ids
 
-    # Add car availability
+    # Add car availability (new variable, value = all/some/no individuals in the household have access to a car)
     df_number_of_cars = df_population[["household_id", "number_of_vehicles"]].drop_duplicates("household_id")
     df_number_of_licenses = df_population[["household_id", "has_license"]].groupby("household_id").sum().reset_index().rename(columns = { "has_license": "number_of_licenses" })
     df_car_availability = pd.merge(df_number_of_cars, df_number_of_licenses)
@@ -79,7 +83,7 @@ def execute(context):
 
     df_population = pd.merge(df_population, df_car_availability[["household_id", "car_availability"]])
 
-    # Add bike availability
+    # Add bike availability (new variable, value = all/some/no individuals in the household have access to a bike)
     df_population["bike_availability"] = "all"
     df_population.loc[df_population["number_of_bikes"] < df_population["household_size"], "bike_availability"] = "some"
     df_population.loc[df_population["number_of_bikes"] == 0, "bike_availability"] = "none"

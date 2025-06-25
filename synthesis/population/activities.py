@@ -4,7 +4,9 @@ import pandas as pd
 import numpy as np
 
 """
-Transforms the synthetic trip table into a synthetic activity table.
+This stage transforms the synthetic trip table into a synthetic activity table.
+Returns: df_activities = list of activities for each person in the synthetic population
+Variables = person_id + activity variables (start, end, purpose, etc.)
 """
 
 def configure(context):
@@ -30,7 +32,7 @@ def execute(context):
 
     df_activities["activity_index"] = df_activities["trip_index"]
 
-    # Add missing end activity
+    # Add missing end activity (activity following the last trip)
     df_last = df_activities[df_activities["is_last_trip"]].copy()
     df_last["purpose"] = df_activities["following_purpose"]
 

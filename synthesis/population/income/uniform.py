@@ -10,6 +10,7 @@ population. For that it looks up the municipality of each household in the
 income database to obtain the municipality's income distribution (in centiles).
 Then, for each household, a centile is selected randomly from the respective
 income distribution and a random income within the selected stratum is chosen.
+Returns: df of households id, consumption units and associated income. 
 """
 
 def configure(context):
@@ -63,4 +64,5 @@ def execute(context):
     # Cleanup
     df_households = df_households[["household_id", "household_income", "consumption_units"]]
     assert len(df_households) == len(df_households["household_id"].unique())
+
     return df_households

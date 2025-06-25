@@ -2,7 +2,8 @@ import re
 import pandas as pd
 
 """
-Creates a vehicle fleet based on a default vehicle type
+This stage creates a vehicle fleet based on a default vehicle type.
+Returns: df of car types (here: 1 type=default_car), df of cars (as many as persons in the synthetic population).
 """
 
 def configure(context):
