@@ -1,7 +1,8 @@
 import numpy as np
 
 """
-This stage filters out persons which were not interviewed on their trips (we keep only individu kish), and renames the accurate weights (in df_persons)
+This stage filters out persons which were not interviewed on their trips (we keep only individu kish), 
+and renames the accurate weights (in df_persons)
 Returns: df_households, df_persons, df_trips
 """
 

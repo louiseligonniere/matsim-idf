@@ -3,8 +3,10 @@ import numpy as np
 import geopandas as gpd
 
 """
-This stage provides a list of home places that serve as potential locations for
-home activities.
+This stage adds IRIS information to the addresses list. It provides a list of home places
+that serve as potential locations for home activities. 
+For IRIS without addresses found in BD-TOPO, a unique address is added at the centroid of the IRIS (weight=1).
+Returns: df of home locations with IRIS information. 
 """
 
 def configure(context):

@@ -4,6 +4,8 @@ import zipfile
 
 """
 This stage loads the raw data from the French service registry.
+Returns: table of services for departments under study (variables = capacity and type of 
+service, coordinates, iris, dep, commune).
 """
 
 def configure(context):
@@ -21,9 +23,9 @@ def execute(context):
     with context.progress(label = "Reading BPE ...") as progress:
         with zipfile.ZipFile("{}/{}".format(context.config("data_path"), context.config("bpe_path"))) as archive:
             with archive.open(context.config("bpe_csv")) as f:
-                csv = pd.read_csv(f, usecols = [ "CAPACITE",
-                        "DCIRIS", "LAMBERT_X", "LAMBERT_Y",
-                        "TYPEQU", "DEPCOM", "DEP"
+                csv = pd.read_csv(f, usecols = [ "CAPACITE", # capacity
+                        "DCIRIS", "LAMBERT_X", "LAMBERT_Y", # iris code, coordinates
+                        "TYPEQU", "DEPCOM", "DEP" # type of service, department+commune, department
                     ], sep = ";",
                     dtype = dict(DEPCOM = str, DEP = str, DCIRIS = str),
                     chunksize = 10240

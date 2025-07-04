@@ -5,6 +5,7 @@ import numpy as np
 
 """
 This stage loads the raw data from the new French address registry (BAN).
+Returns: gpd df of addresses (only geometry) for departments under study.
 """
 
 def configure(context):

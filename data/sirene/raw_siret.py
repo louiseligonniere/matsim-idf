@@ -2,7 +2,9 @@ import os
 import pandas as pd
 
 """
-This stage loads the raw data from the French enterprise registry.
+This stage loads the raw data from the French enterprise registry (SIRET = "établissements").
+Returns: table of establishments for departments under study (variables = activité, 
+treffectif, état administratif).
 """
 
 def configure(context):

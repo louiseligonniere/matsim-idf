@@ -1,6 +1,15 @@
 import pandas as pd
 import numpy as np
 
+"""
+This stage adds commuting distance for work (resp. education) for each person to df_persons.
+For those who do not have home<->work (resp. education) commutes, distance is sampled from the 
+overall distribution of distances.
+# TODO: We could impute missing distances by mode, which would make it more consistent!
+
+Returns: dict of df_persons to which were added commuting distance for 1. work and 2. education.
+"""
+
 def configure(context):
     context.config("random_seed")
     context.stage("data.hts.selected")
@@ -13,7 +22,7 @@ def get_commuting_distance(df_persons, df_trips, activity_type, random):
         distance_slot = "routed_distance"
         distance_factor = 1.0 # / 1.3
 
-    # Add commuting distances
+    # Add commuting distances (home <-> work/education for each person)
     df_commute_distance = df_trips[
         ((df_trips["preceding_purpose"] == "home") & (df_trips["following_purpose"] == activity_type)) |
         ((df_trips["preceding_purpose"] == activity_type) & (df_trips["following_purpose"] == "home"))
@@ -40,7 +49,7 @@ def get_commuting_distance(df_persons, df_trips, activity_type, random):
     indices = [
         np.searchsorted(cdf, r)
         for r in random.random_sample(size = np.count_nonzero(f_missing))
-    ]
+    ] # select indices of distances which are not missing for each missing one, while respecting the cdf
 
     df_persons.loc[f_missing, "commute_distance"] = values[indices]
 

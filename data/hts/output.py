@@ -4,7 +4,7 @@ import numpy as np
 import geopandas as gpd
 
 """
-Often, we need the HTS for additioinal analyses, for instance, for the calibration
+Often, we need the HTS for additional analyses, for instance, for the calibration
 of mode shares. This stage makes it easy to extract the cleaned HTS from the
 pipeline.
 """

@@ -7,7 +7,9 @@ import glob
 import numpy as np
 
 """
-This stage loads the raw data from the French building registry (BD-TOPO).
+This stage loads the raw data from the French building registry (BD-TOPO), filters out
+buildings with no housing and duplicates, and keeps buildings in departments under study.
+Returns: df of buildings with nb of housings and geometry (departments under study).
 """
  
 def configure(context):

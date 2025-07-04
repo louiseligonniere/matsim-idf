@@ -8,6 +8,12 @@ import math
 import numpy as np
 from analysis.synthesis.population import ANALYSIS_FOLDER
 
+"""
+This stage puts everything together! 
+Returns: none. 
+Outputs are exported to the output folder (according to specified output_formats).
+"""
+
 def configure(context):
 
     context.stage("synthesis.population.enriched")
@@ -92,6 +98,7 @@ def execute(context):
     df_activities["preceding_trip_index"] = df_activities["following_trip_index"].shift(1)
     df_activities.loc[df_activities["is_first"], "preceding_trip_index"] = -1
     df_activities["preceding_trip_index"] = df_activities["preceding_trip_index"].astype(int)
+    
     # Prepare spatial data sets
     df_locations = context.stage("synthesis.population.spatial.locations")[[
         "person_id",  "iris_id", "commune_id","departement_id","region_id","activity_index", "geometry"
@@ -194,7 +201,6 @@ def execute(context):
     if "parquet" in output_formats:
         df_vehicle_types.to_parquet("%s/%svehicle_types.parquet" % (output_path, output_prefix))
         df_vehicles.to_parquet("%s/%svehicles.parquet" % (output_path, output_prefix))
-
 
     if "gpkg" in output_formats:
         path = "%s/%sactivities.gpkg" % (output_path, output_prefix)

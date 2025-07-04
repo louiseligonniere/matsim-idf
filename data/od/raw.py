@@ -3,7 +3,11 @@ import os
 import zipfile
 
 """
-Loads raw OD data from French census data.
+This stage loads raw OD data from French census data (for work and education purposes).
+Returns: - 1. work = table of work commutes with O&D in communes under study (each commute 
+is given a weight) + commute mode
+- 2. education = table of education commutes with O&D in communes under study (each commute 
+is given a weight) + trage of the corresponding individual
 """
 
 def configure(context):
@@ -23,11 +27,11 @@ def execute(context):
         df_records = []
 
         COLUMNS_DTYPES = {
-            "COMMUNE":"str", 
-            "ARM":"str", 
-            "TRANS":"int",
-            "IPONDI":"float", 
-            "DCLT":"str"
+            "COMMUNE":"str", # home department+commune
+            "ARM":"str", # home arrondissement municipal (Paris, Lyon, Marseille)
+            "TRANS":"int", # commuting mode
+            "IPONDI":"float", # weight
+            "DCLT":"str" # work department+commune+arrondissement
         }
 
         with zipfile.ZipFile(
@@ -54,11 +58,11 @@ def execute(context):
         df_records = []
 
         COLUMNS_DTYPES = {
-            "COMMUNE":"str", 
-            "ARM":"str", 
-            "IPONDI":"float",
-            "DCETUF":"str",
-            "AGEREV10":"int"
+            "COMMUNE":"str", # home department+commune
+            "ARM":"str", # home arrondissement municipal (Paris, Lyon, Marseille)
+            "IPONDI":"float", # weight
+            "DCETUF":"str", # education department+commune+arrondissement
+            "AGEREV10":"int" # trage
         }
 
         with zipfile.ZipFile(

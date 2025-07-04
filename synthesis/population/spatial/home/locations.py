@@ -3,6 +3,14 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 
+"""
+This stage samples a location for each home located in IRIS's under study. Weights are the 
+number of housings associated to addresses (coming from the buildings database, shared 
+equally if a building was matched to more than one address).
+Returns: gpd df of homes with their associated household (synthetized pop), address 
+(home_location_id) and geometry.
+"""
+
 def configure(context):
     context.stage("synthesis.population.spatial.home.zones")
     context.stage("synthesis.locations.home.locations")

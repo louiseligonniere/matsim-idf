@@ -9,6 +9,9 @@ work activities. It is derived from the SIRENE enterprise database.
 
 Municipalities which do not have any registered enterprise receive a fake work
 place at their centroid to be in line with INSEE OD data.
+
+Returns: gpd df of establishments (departments under study, variables = commune, employees, 
+geometry + is it true or fake).
 """
 
 def configure(context):

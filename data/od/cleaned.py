@@ -2,8 +2,9 @@ import pandas as pd
 import numpy as np
 
 """
-Cleans OD data to arrive at OD flows between municipalities for work
-and education.
+Cleans OD data to arrive at OD flows between municipalities for work and education.
+Returns: - 1. df_work = gives number of work commutes by origin x destination x mode
+- 2. df_education = gives number of education commutes by origin x destination x trage
 """
 
 def configure(context):
@@ -13,7 +14,6 @@ def configure(context):
 RENAME = { "COMMUNE" : "origin_id", "DCLT" : "destination_id", "IPONDI" : "weight", "DCETUF" : "destination_id" }
 
 def execute(context):
-    
     
     # Load data
     df_work, df_education = context.stage("data.od.raw")

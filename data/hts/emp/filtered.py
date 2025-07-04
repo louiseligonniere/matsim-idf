@@ -2,8 +2,8 @@ import data.hts.hts as hts
 import numpy as np
 
 """
-This stage filters out EMP observations which live outside of the region under study (here: Île-de-France). 
-Returns: df_households, df_persons, df_trips, filtered on persons living in the region under study (here: IDF). 
+This stage filters out EMP observations which live outside of the region under study (if filter_hts=True). 
+Returns: df_households, df_persons, df_trips, filtered on persons living in the region under study. 
 """
 
 def configure(context):

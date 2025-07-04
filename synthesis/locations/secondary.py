@@ -3,6 +3,11 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 
+"""
+This stage attaches secondary activity attributes to services (offers leisure/shop/other). 
+Returns: df of services (with geometry + secondary activity attribute).
+"""
+
 def configure(context):
     context.stage("data.bpe.cleaned")
     context.stage("data.spatial.municipalities")

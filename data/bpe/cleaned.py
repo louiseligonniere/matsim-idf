@@ -4,10 +4,16 @@ import data.spatial.utils as spatial_utils
 import geopandas as gpd
 
 """
-This stage cleans the enterprise census:
-  - Filter out enterprises that do not have a valid municipality or IRIS
-  - Assign coordinates randomly to enterprises that do not have coordinates
-  - Simplify activity types for all enterprises
+This stage cleans the services census:
+  - Simplify activity types for all services
+  - Add weights to services(=capacity if education_location_source!=bpe, else 500)
+  - Filter out services that do not have a valid municipality or IRIS
+  - Assign coordinates randomly to services that do not have coordinates (in their respective 
+  IRIS if it is defined, or in their commune)
+  - Fix coordinates for services that are located outside their respective municipality (sample 
+  new coordinates inside the municipality)
+Returns: gpd df of services (departments under study), variables = activity/education type, 
+coordinates, weight.
 """
 
 def configure(context):
@@ -60,9 +66,11 @@ def execute(context):
 
     df["activity_type"] = df["activity_type"].astype("category")
 
-    #Add 
     df = df.rename(columns={"TYPEQU":"education_type"})
+
+    # Add weights
     df["weight"] = df["CAPACITE"].fillna(500) if context.config("education_location_source") != "bpe" else 500
+
     # Clean coordinates
     df["x"] = df["LAMBERT_X"].astype(str).str.replace(",", ".").astype(float)
     df["y"] = df["LAMBERT_Y"].astype(str).str.replace(",", ".").astype(float)
@@ -121,7 +129,7 @@ def execute(context):
     df["imputed"] = f_missing
     assert not df["x"].isna().any()
 
-    # Intrestingly, some of the given coordinates are not really inside of
+    # Interestingly, some of the given coordinates are not really inside of
     # the respective municipality. Find them and move them back in.
     outside_indices = []
 
@@ -140,7 +148,7 @@ def execute(context):
         df.loc[outside_indices, "imputed"] = True
 
     # Package up data set
-    df = df[["enterprise_id", "activity_type","education_type", "commune_id", "imputed", "x", "y","weight"]]
+    df = df[["enterprise_id", "activity_type", "education_type", "commune_id", "imputed", "x", "y", "weight"]]
 
     df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.x, df.y),crs="EPSG:2154")
 

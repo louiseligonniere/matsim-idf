@@ -6,6 +6,24 @@ import geopandas as gpd
 
 from synthesis.population.spatial.secondary.problems import find_assignment_problems
 
+"""
+This stage assigns locations to secondary activities. 
+    - First, all assignment problems are identified. One assignment problem = a chain of variable 
+    activities (activities with no assigned location), in between two fixed activities (with 
+    already assigned locations).
+    - Second, for each assignment problem:
+        - A distance is sampled for each trip (using distribution for the given mode and 
+        depending on travel time)
+        - Coordinates are assigned to each variable activity, to match all sampled distances in 
+        the chain
+        - A location (from BPE) is selected for each activity, in the corresponding activity 
+        type (shopping / leisure) and closest possible to attributed coordinates
+
+Returns: - df_locations = gpd df of attributed secondary locations (var=person_id, 
+activity_index, location_id, geometry) 
+- df_convergence = for each assignemnt problem, records whether it is valid and its size.
+"""
+
 def configure(context):
     context.stage("synthesis.population.trips")
 
@@ -31,6 +49,7 @@ def prepare_locations(context):
     df_work = df_work.rename(columns = { "geometry": "work" })
     df_education = df_education.rename(columns = { "geometry": "education" })
 
+    # Add primary locations to persons
     df_locations = context.stage("synthesis.population.sampled")[["person_id", "household_id"]]
     df_locations = pd.merge(df_locations, df_home[["household_id", "home"]], how = "left", on = "household_id")
     df_locations = pd.merge(df_locations, df_work[["person_id", "work"]], how = "left", on = "person_id")
@@ -39,6 +58,7 @@ def prepare_locations(context):
     return df_locations[["person_id", "home", "work", "education"]].sort_values(by = "person_id"), crs
 
 def prepare_destinations(context):
+    # Load secondary locations
     df_locations = context.stage("synthesis.locations.secondary")
 
     identifiers = df_locations["location_id"].values
@@ -46,6 +66,7 @@ def prepare_destinations(context):
 
     data = {}
 
+    # Split locations according to activity type
     for purpose in ("shop", "leisure", "other"):
         f = df_locations["offers_%s" % purpose].values
 

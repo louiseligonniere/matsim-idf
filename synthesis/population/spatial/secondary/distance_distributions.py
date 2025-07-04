@@ -1,10 +1,19 @@
 import numpy as np
 import pandas as pd
 
+"""
+This stage computes distance distributions according to travel time, separately for each mode.
+Distances are split in bands (each band = 200 unique distance values), and distribution is 
+computed for each band. Distribution is computed using person_weights.
+Returns: list of distributions, by mode (the entry for each mode is a dict that gives the 
+bounds and distribution for each band). 
+"""
+
 def configure(context):
     context.stage("data.hts.selected", alias = "hts")
 
-def calculate_bounds(values, bin_size):
+def calculate_bounds(values, bin_size): 
+    # Goes through unique values and keeps one entry every 200 values (200th, 400th, etc.)
     values = np.sort(values)
 
     bounds = []
@@ -24,7 +33,7 @@ def calculate_bounds(values, bin_size):
 
     if len(bounds) > 0:
         bounds[-1] = np.inf
-    else:
+    else: # happens if less than 200 values in values
         bounds.append(np.inf)
         
     return bounds
@@ -39,7 +48,7 @@ def execute(context):
     distance_column = "euclidean_distance" if "euclidean_distance" in df_trips else "routed_distance"
     df = df_trips[["mode", "travel_time", distance_column, "weight", "preceding_purpose", "following_purpose"]].rename(columns = { distance_column: "distance" })
 
-    # Filtering
+    # Filtering out trips between two primary activities (home, work, education)
     primary_activities = ["home", "work", "education"]
     df = df[~(
         df["preceding_purpose"].isin(primary_activities) &
@@ -59,7 +68,7 @@ def execute(context):
 
         distributions[mode] = dict(bounds = np.array(bounds), distributions = [])
 
-        # Second, calculate distribution per band
+        # Second, calculate distribution per band (in between two bounds)
         for lower_bound, upper_bound in zip([-np.inf] + bounds[:-1], bounds):
             f_bound = (df["travel_time"] > lower_bound) & (df["travel_time"] <= upper_bound)
 

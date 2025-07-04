@@ -5,8 +5,10 @@ import pandas as pd
 
 """
 This stage attaches trips to the synthetic population using synth.pop.matched. 
-Each trip is duplicated as many times as the number of persons in the synthetic population to which it was matched.
-Departure times are diversified using a random offset in [-30min, +30min] (with constraint to keep all departure times after midnight).
+Each trip is duplicated as many times as the number of persons in the synthetic population 
+to which it was matched.
+Departure times are diversified using a random offset in [-30min, +30min] (with constraint 
+to keep all departure times after midnight).
 The same offset is added to each trip in a person's activity chain.
 Returns: df_trips = matched person_id + trips variables.
 """

@@ -12,10 +12,10 @@ Loads and prepares income distributions by municipality:
     - For those which only provide median: Attach another distribution with most similar median
     - For those which are missing: Attach the distribution of the municiality with the nearest centroid
 - For attribute distributions, read the adequate Filosofi sheet and get the percentiles
-Returns: income dataframe (columns specified in INCOME_DF_COLUMNS) = df that gives the global income distribution for each commune, 
-and distribution for each commune for some specific attributes values (for attributes available both in Filosofi and Eqasim)
+Returns: income dataframe (columns specified in INCOME_DF_COLUMNS) = df that gives the global 
+income distribution for each commune, and distribution for each commune for some specific attributes 
+values (for attributes available both in Filosofi and Eqasim)
 """
-
 
 # for now, only household size and family composition can be inferred from eqasim population
 EQASIM_INCOME_ATTRIBUTES = ["size", "family_comp"]

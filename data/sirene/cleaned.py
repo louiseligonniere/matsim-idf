@@ -2,7 +2,8 @@ import pandas as pd
 import numpy as np
 
 """
-Clean the SIRENE enterprise census.
+This stage cleans the SIRENE enterprise census, and adds some variables (min/max employees).
+Returns: table of establishments (variables = siren, siret, commune, min/max employees, activity).
 """
  
 def configure(context):
@@ -14,7 +15,6 @@ def configure(context):
 def execute(context):
     df_sirene_establishments = context.stage("data.sirene.raw_siret")
     df_sirene_headquarters = context.stage("data.sirene.raw_siren")
-
 
     # Filter out establishments without a corresponding headquarter
     df_sirene = df_sirene_establishments[df_sirene_establishments["siren"].isin(df_sirene_headquarters["siren"])].copy()

@@ -5,7 +5,8 @@ import zipfile
 
 """
 This stage loads the raw data of the French HTS (EMP).
-Returns: 6 datasets: df_individu, df_tcm_individu, df_tcm_individu_kish, df_menage, df_tcm_menage, df_deploc (complete EMP datasets, not filtered geographically)
+Returns: 6 datasets: df_individu, df_tcm_individu, df_tcm_individu_kish, df_menage, 
+df_tcm_menage, df_deploc (complete EMP datasets, not filtered geographically)
 """
 
 Q_MENAGE_COLUMNS = [ "IDENT_MEN", "pond_menC",

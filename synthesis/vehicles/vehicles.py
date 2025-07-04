@@ -1,7 +1,8 @@
 import pandas as pd
 
 """
-This stage concatenates cars and passengers types on the one hand, and cars and passengers vehicles on the other hand.
+This stage concatenates cars and passengers types on the one hand, and cars and passengers 
+vehicles on the other hand.
 Returns: df_types (car + passenger types), df_vehicles (cars + passengers).
 """
 

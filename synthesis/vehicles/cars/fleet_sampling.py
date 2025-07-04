@@ -4,7 +4,11 @@ import numpy as np
 from datetime import date
 
 """
-Creates the synthetic vehicle fleet
+This stage is executed if vehicles_method=fleet_sample.
+It creates the synthetic vehicle fleet by sampling one vehicle by synthetic person. Vehicles 
+are sampled in the vehicle fleet described in public data (SDES).
+Returns: df of car types (here: 1 type=default_car), df of cars (as many as persons in the 
+synthetic population).
 """
 
 def configure(context):

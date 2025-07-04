@@ -2,7 +2,9 @@ import os
 import pandas as pd
 
 """
-This stage loads the raw data from the French enterprise registry.
+This stage loads the raw data from the French enterprise registry (SIREN = "entreprises").
+Returns: table of headquarters that have establishments in the departments under study (variables = 
+catégorie juridique).
 """
 
 def configure(context):

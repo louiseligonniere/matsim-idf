@@ -1,5 +1,12 @@
 import pandas as pd
 
+"""
+This stage adds commute distance for work (resp. education) (computed from the HTS) to persons 
+in the synthetic population (following the matching HTS-census).
+Returns: dict of df of persons in the synth pop + their respective hts_id and commute distance 
+for 1. work and 2. education
+"""
+
 def configure(context):
     context.stage("synthesis.population.enriched")
     context.stage("data.hts.commute_distance")

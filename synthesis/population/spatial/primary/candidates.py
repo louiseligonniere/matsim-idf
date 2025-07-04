@@ -1,6 +1,26 @@
 import pandas as pd
 import numpy as np
 
+"""
+This stage samples location candidates for work and education (in SIRENE and BPE data). 
+It is done in 2 steps (each step is done first for work and then for education, independantly): 
+    - First, sample destination municipalities for work/education commutes leaving each origin 
+    municipality, following a multinomial with weights=O/D flows previously calculated (from 
+    census data).
+    - Second, sample locations inside each destination municipality (as many as commutes 
+    arriving in that municipality). 
+        - For work, it is done with weights proportional to nb of workers in each workplace.
+        - For education, if education_location_source=bpe, it is done with uniform weights. 
+        If education_location_source!=bpe, it is done separately for each age range (to match age 
+        range and school level) and with weights proportional to nb of students in each school.
+
+Returns: dict with: 1. work_candidates = df of work location candidates by O/D work commute 
+(origin_id, destination_id, location_id)
+2. education_candidates = df of education location candidates by O/D education commute 
+(origin_id, destination_id, location_id)
+3. persons = df of persons that have work or education trips (with their id, age range, commune_id)
+"""
+
 def configure(context):
     context.stage("data.od.weighted")
 
@@ -28,9 +48,9 @@ def sample_destination_municipalities(context, arguments):
 
     # Prepare state
     random = np.random.RandomState(random_seed)
-    df_od = df_od[df_od["origin_id"] == origin_id].copy()
+    df_od = df_od[df_od["origin_id"] == origin_id].copy() # O/D flows for the origin municipality under study
 
-    # Sample destinations
+    # Sample destinations in the O/D flow matrix (using previously computed weights of each destination)
     df_od["count"] = random.multinomial(count, df_od["weight"].values)
     df_od = df_od[df_od["count"] > 0]
 
@@ -44,11 +64,11 @@ def sample_locations(context, arguments):
 
     # Prepare state
     random = np.random.RandomState(random_seed)
-    df_locations = df_locations[df_locations["commune_id"] == destination_id]
+    df_locations = df_locations[df_locations["commune_id"] == destination_id] # locations in the destination municipality under study
     
     # Determine demand
     df_flow = df_flow[df_flow["destination_id"] == destination_id]
-    count = df_flow["count"].sum()
+    count = df_flow["count"].sum() # nb of persons commuting to that destination municipality
 
     # Sample destinations
     weight = np.ones((len(df_locations),)) / len(df_locations)
@@ -75,21 +95,21 @@ def sample_locations(context, arguments):
 
     return df_result
 
-def process(context, purpose, random, df_persons, df_od, df_locations,step_name):
+def process(context, purpose, random, df_persons, df_od, df_locations, step_name):
     df_persons = df_persons[df_persons["has_%s_trip" % purpose]]
 
     # Sample commute flows based on population
     df_demand = df_persons.groupby("commune_id",observed=False).size().reset_index(name = "count")
     df_demand["random_seed"] = random.randint(0, int(1e6), len(df_demand))
     df_demand = df_demand[["commune_id", "count", "random_seed"]]
-    df_demand = df_demand[df_demand["count"] > 0]
+    df_demand = df_demand[df_demand["count"] > 0] # demand = nb of residents that have a work/education commute for each municipality
 
     df_flow = []
 
     with context.progress(label = "Sampling %s municipalities" % step_name, total = len(df_demand)) as progress:
         with context.parallel(dict(df_od = df_od)) as parallel:
             for df_partial in parallel.imap_unordered(sample_destination_municipalities, df_demand.itertuples(index = False, name = None)):
-                df_flow.append(df_partial)
+                df_flow.append(df_partial) # dispatch the demand for each origin municipality between destination municipalities (multinomial sample)
 
     df_flow = pd.concat(df_flow).sort_values(["origin_id", "destination_id"])
 
@@ -102,7 +122,7 @@ def process(context, purpose, random, df_persons, df_od, df_locations,step_name)
     with context.progress(label = "Sampling %s destinations" % purpose, total = len(df_demand)) as progress:
         with context.parallel(dict(df_locations = df_locations, df_flow = df_flow)) as parallel:
             for df_partial in parallel.imap_unordered(sample_locations, zip(unique_ids, random_seeds)):
-                df_result.append(df_partial)
+                df_result.append(df_partial) # sample work/education locations in the destination municipality for each O/D couple (as many as commutes on that O/D)
 
     df_result = pd.concat(df_result).sort_values(["origin_id", "destination_id"])
 
@@ -138,15 +158,16 @@ def execute(context):
 
     df_locations = context.stage("synthesis.locations.education")
     if context.config("education_location_source") == 'bpe':
-        df_education = process(context, "education", random, df_persons, df_education_od, df_locations,"education")
+        df_education = process(context, "education", random, df_persons, df_education_od, df_locations, "education")
     else :
         df_education = []
         for prefix, education_type in EDUCATION_MAPPING.items():
             df_education.append(
                 process(context, "education", random,
                     df_persons[df_persons["age_range"]==prefix],
-                    df_education_od[df_education_od["age_range"]==prefix],df_locations[df_locations["education_type"].isin(education_type)],prefix)
-            )
+                    df_education_od[df_education_od["age_range"]==prefix], 
+                    df_locations[df_locations["education_type"].isin(education_type)], prefix)
+            ) # if education_location_source != bpe, sampling of education locations is made separately within each age_range (to match level of schools)
         df_education = pd.concat(df_education)
 
     return dict(

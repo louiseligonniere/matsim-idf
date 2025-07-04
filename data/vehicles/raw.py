@@ -7,6 +7,8 @@ import zipfile
 """
 This stage loads the raw data of the specified vehicle fleet data
 https://www.statistiques.developpement-durable.gouv.fr/donnees-sur-le-parc-automobile-francais-au-1er-janvier-2021
+Returns: - df_vehicle_fleet_counts (= nb of vehicles by region, commune, critair and technology)
+- df_vehicle_age_counts (= nb of vehicles by region, critair, technology and age)
 """
 
 def configure(context):

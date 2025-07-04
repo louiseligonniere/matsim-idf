@@ -16,6 +16,9 @@ adresses. For instance, the assigned addresses of a building with 10 housing uni
 and two addresses will have a weight of 5.
 
 If no adresses matches a building, its centroid is taken as the unique address.
+
+Returns: df of addresses associated to buildings (departments under study) (var=home_location_id), 
+weight (number of housings) and geometry.
 """
 
 def configure(context):

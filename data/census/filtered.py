@@ -3,9 +3,9 @@ import pandas as pd
 import numpy as np
 
 """
-This stage filters out census observations which live or work outside of
-Île-de-France.
-Returns: extract of the census with selected and cleaned variables variables AND FILTERED for departements under study
+This stage filters out census observations which live or work outside of Île-de-France.
+Returns: extract of the census with selected and cleaned variables variables AND FILTERED 
+for departements under study.
 """
 
 def configure(context):

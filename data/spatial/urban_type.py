@@ -4,7 +4,8 @@ import zipfile
 import numpy as np
 
 """
-This stages loads a file containing urban types and filters urban types for municipalities in df_municipalities.
+This stages loads a file containing urban types and filters urban types for municipalities 
+in df_municipalities.
 Returns: table of communes and urban types (communes under study).
 """
 

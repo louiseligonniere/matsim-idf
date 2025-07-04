@@ -12,7 +12,7 @@ covered by IRIS) to the first case, and we can attach a random IRIS within a com
 has less than 200 inhabitants to the second case.
 The sample is done with probabilities proportionnal to population of each commune / IRIS.
 
-Returns: df of households and their IRIS/commune/department of residence.
+Returns: df of synthetized households and their IRIS/commune/department of residence.
 """
 
 def configure(context):

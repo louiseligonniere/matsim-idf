@@ -6,7 +6,8 @@ import itertools
 This stage has the census data as input and samples households according to the
 household weights given by INSEE. The resulting sample size can be controlled
 through the 'sampling_rate' configuration option.
-Sample done by replicating each household by its household weight (stochastically rounded) and then uniform sample with defined sampling_rate
+Sample done by replicating each household by its household weight (stochastically rounded) and 
+then uniform sample with defined sampling_rate
 Returns: SAMPLED census extract. 
 """
 

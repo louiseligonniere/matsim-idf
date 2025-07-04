@@ -13,7 +13,7 @@ Returns: Table of IRIS, commune, département and région for every IRIS under s
 def configure(context):
     context.config("data_path")
 
-    context.config("regions", [11]) # Here : we study IDF (code région = 11)
+    context.config("regions", [11])
     context.config("departments", [])
     context.config("codes_path", "codes_2023/reference_IRIS_geo2023.zip")
     context.config("codes_xlsx", "reference_IRIS_geo2023.xlsx")

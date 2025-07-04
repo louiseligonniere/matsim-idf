@@ -11,9 +11,11 @@ import multiprocessing as mp
 
 """
 This stage attaches obervations from the household travel survey to the synthetic population sample. 
-This is done by statistical matching, with HTS as source, synthetic population as target, and matching attributes (default=sex,any_cars,age_class,socioprofessional_class,departement_id). 
+This is done by statistical matching, with HTS as source, synthetic population as target, and 
+matching attributes (default=sex,any_cars,age_class,socioprofessional_class,departement_id). 
 It is run using parallelization.
-Returns: df_target[["person_id", "hts_id"]] = tableau des matchs donnant l'id target (pop synth) et l'id source (hts)
+Returns: df_target[["person_id", "hts_id"]] = tableau des matchs donnant l'id target (pop synth) 
+et l'id source (hts)
 """
 
 INCOME_CLASS = {

@@ -3,6 +3,7 @@ import pandas as pd
 
 """
 This stage loads the geolocalization data for the French enterprise registry.
+Returns: table of establishments + their x/y coordinates for departments under study.
 """
 
 def configure(context):

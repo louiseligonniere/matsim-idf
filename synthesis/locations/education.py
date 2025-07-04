@@ -3,6 +3,15 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 
+"""
+This stage isolates education services, and adds fake education destinations for communes that 
+have no education services in the BPE (localized at the centroid and with weight=1). 
+If education_location_source=bpe, fake education services have type C0, otherwise it is done 
+separately for each education type (C1,C2,C3).
+Returns: df of education services for communes under study (variables = education type, 
+weight, geometry).
+"""
+
 def configure(context):
     context.stage("data.spatial.municipalities")
 
@@ -41,7 +50,7 @@ def execute(context):
     df_locations = context.stage("location_source")
 
     df_locations = df_locations[df_locations["activity_type"] == "education"]
-    df_locations = df_locations[["education_type", "commune_id","weight", "geometry"]].copy()
+    df_locations = df_locations[["education_type", "commune_id", "weight", "geometry"]].copy()
     df_locations["fake"] = False
 
     # Add education destinations to the centroid of zones that have no other destinations
@@ -50,7 +59,6 @@ def execute(context):
     required_communes = set(df_zones["commune_id"].unique())  
 
     if context.config("education_location_source") != 'bpe' :
-
          
         # Add education destinations in function of level education
         for c in ["C1", "C2", "C3"]:
