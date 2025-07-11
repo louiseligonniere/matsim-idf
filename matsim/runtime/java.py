@@ -8,7 +8,7 @@ Returns: none (no execute instructions).
 
 def configure(context):
     context.config("java_binary", "java")
-    context.config("java_memory", "50G")
+    context.config("java_memory", "50G", volatile = True)
 
 def run(context, entry_point, arguments = [], class_path = None, vm_arguments = [], cwd = None, memory = None, mode = "raise"):
     """
