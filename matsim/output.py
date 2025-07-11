@@ -1,5 +1,10 @@
 import shutil
 
+"""
+This stage exports the MATSim outputs to the output folder.
+Returns: none. 
+"""
+
 def configure(context):
     if context.config("run_matsim", True):
         # allow disabling performing one run of the simulation

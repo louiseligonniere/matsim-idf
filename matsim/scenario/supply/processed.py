@@ -2,6 +2,12 @@ import os.path
 
 import matsim.runtime.pt2matsim as pt2matsim
 
+"""
+This stage calls pt2matsim to process the network and transit schedule files (from previous stages). 
+It also writes the configuration used into config_template.xml.
+Returns: file names "network.xml.gz" and "schedule.xml.gz".
+"""
+
 def configure(context):
     context.stage("matsim.runtime.java")
     context.stage("matsim.runtime.pt2matsim")

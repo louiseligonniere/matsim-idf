@@ -5,6 +5,7 @@ output
 .conda
 
 data_sources
+output_treatment
 
 data/nantes_2015
 data/lyon_2015

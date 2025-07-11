@@ -5,6 +5,11 @@ import pandas as pd
 
 import matsim.writers as writers
 
+"""
+This stage writes the facilities.xml.gz file (using df_homes, df_work, df_education, df_locations (contains secondary locations)).
+Returns: file name "facilities.xml.gz"
+"""
+
 def configure(context):
     context.stage("synthesis.locations.secondary")
     context.stage("synthesis.population.spatial.home.locations")

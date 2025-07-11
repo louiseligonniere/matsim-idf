@@ -1,6 +1,11 @@
 import subprocess as sp
 import os, shutil
 
+"""
+This stage defines the java run function.
+Returns: none (no execute instructions).
+"""
+
 def configure(context):
     context.config("java_binary", "java")
     context.config("java_memory", "50G")

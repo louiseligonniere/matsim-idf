@@ -2,6 +2,12 @@ import os.path
 
 import matsim.runtime.pt2matsim as pt2matsim
 
+"""
+This stage calls pt2matsim to create the network file (and detailed_network file if export_detailed_network=True). 
+It also writes the configuration used for the network into config_template.xml.
+Returns: file name "network.xml.gz"
+"""
+
 def configure(context):
     context.stage("matsim.runtime.java")
     context.stage("matsim.runtime.pt2matsim")

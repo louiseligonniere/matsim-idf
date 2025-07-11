@@ -1,6 +1,11 @@
 import subprocess as sp
 import shutil
 
+"""
+This stage defines the git run function.
+Returns: none (no execute instructions).
+"""
+
 def configure(context):
     context.config("git_binary", "git")
 

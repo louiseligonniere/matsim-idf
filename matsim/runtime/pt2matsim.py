@@ -5,6 +5,15 @@ import matsim.runtime.git as git
 import matsim.runtime.java as java
 import matsim.runtime.maven as maven
 
+"""
+This stage does two things:
+    - 1. It clones the matsim-org/pt2matsim.git repo and builds the pt2matsim .jar using Maven (jar path: 
+    pt2matsim/target/pt2matsim-%s-shaded.jar)
+    - 2. It defines the pt2matsim.run function, which in turns calls the java.run function to execute 
+    pt2matsim (through the .jar created as specified in point 1).
+Returns: none. 
+"""
+
 def configure(context):
     context.stage("matsim.runtime.git")
     context.stage("matsim.runtime.java")

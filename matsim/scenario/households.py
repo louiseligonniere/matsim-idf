@@ -5,6 +5,11 @@ import pandas as pd
 
 import matsim.writers as writers
 
+"""
+This stage writes the households.xml.gz file (using df_persons).
+Returns: file name "households.xml.gz"
+"""
+
 def configure(context):
     context.stage("synthesis.population.enriched")
 

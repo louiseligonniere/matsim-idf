@@ -2,6 +2,12 @@ import os.path
 
 import matsim.runtime.pt2matsim as pt2matsim
 
+"""
+This stage calls pt2matsim to create the transit schedule and the transit vehicles files from the GTFS. 
+It also writes the configuration used for the schedule into config_template.xml.
+Returns: file names "transit_schedule.xml.gz" and "transit_vehicles.xml.gz".
+"""
+
 def configure(context):
     context.stage("matsim.runtime.java")
     context.stage("matsim.runtime.pt2matsim")

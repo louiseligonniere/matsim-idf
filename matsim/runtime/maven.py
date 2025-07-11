@@ -1,6 +1,11 @@
 import subprocess as sp
 import os, shutil
 
+"""
+This stage defines the maven run function.
+Returns: none (no execute instructions).
+"""
+
 def configure(context):
     context.config("maven_binary", "mvn")
     context.config("maven_skip_tests", False)

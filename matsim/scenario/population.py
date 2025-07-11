@@ -7,6 +7,11 @@ import pandas as pd
 import matsim.writers as writers
 from matsim.writers import backlog_iterator
 
+"""
+This stage writes the population.xml.gz file (using df_persons, df_activities, df_locations, df_trips and df_vehicles).
+Returns: file name "population.xml.gz"
+"""
+
 def configure(context):
     context.stage("synthesis.population.enriched")
 

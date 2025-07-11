@@ -5,6 +5,11 @@ import pandas as pd
 
 import matsim.writers as writers
 
+"""
+This stage writes the vehicles.xml.gz file (using df_vehicles and df_vehicle_types).
+Returns: file name "vehicles.xml.gz"
+"""
+
 def configure(context):
     context.stage("synthesis.vehicles.vehicles")
 

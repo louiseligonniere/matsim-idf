@@ -3,6 +3,12 @@ import os.path
 
 import matsim.runtime.eqasim as eqasim
 
+"""
+This stage calls the eqasim.run function (defined in matsim.runtime.eqasim), which is used to execute the MATSim simulation.
+The configuration is given in "cache/matsim.simulation.prepare".
+Returns: none.
+"""
+
 def configure(context):
     context.stage("matsim.simulation.prepare")
 

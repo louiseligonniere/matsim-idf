@@ -5,6 +5,15 @@ import matsim.runtime.git as git
 import matsim.runtime.java as java
 import matsim.runtime.maven as maven
 
+"""
+This stage does two things:
+    - 1. It creates the .jar executable that is used to execute the MATSim simulation. This is done by cloning 
+    the eqasim-org/eqasim-java.git repo and building the eqasim .jar using Maven.
+    - 2. It defines the eqasim.run function, which in turns calls the java.run function to execute the MATSim 
+    simulation (through the .jar created as specified in point 1).
+Returns: path to the .jar executable ("eqasim-java/ile_de_france/target/ile_de_france-%s.jar" % version). 
+"""
+
 DEFAULT_EQASIM_VERSION = "1.5.0"
 DEFAULT_EQASIM_BRANCH = "develop"
 DEFAULT_EQASIM_COMMIT = "ece4932"
