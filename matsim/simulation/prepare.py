@@ -3,6 +3,18 @@ import os.path
 
 import matsim.runtime.eqasim as eqasim
 
+"""
+This stage finishes the preparation of MATSim simulation, using files that were created in the previous stages:
+    - It runs eqasim to prepare facilities, population and network files (saved into stage cache folder)
+    - It copies households, transit schedule, transit vehicles and vehicles files into stage cache folder
+    - It generates the configuration file adapted for IDF (config.xml) 
+    - It adds urban attributes to population and network (only if Paris is included in the scenario) - done 
+    through Eqasim call (RunImputeSpatialAttribute and RunAdjustCapacity)
+    - It performs mode choice if mode_choice=True
+
+Returns: name of the config file. 
+"""
+
 def configure(context):
     context.config("mode_choice", False)
     
