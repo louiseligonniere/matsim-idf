@@ -2,6 +2,11 @@ import os
 import matsim.runtime.eqasim as eqasim
 from synpp import ConfigurationContext, ExecuteContext
 
+"""
+This stage runs the full MATSim simulation (using the eqasim.run function). 
+Outputs (including experienced plans) are written in the output folder.
+Returns: none.
+"""
 
 def configure(context: ConfigurationContext):
     context.config("output_path")

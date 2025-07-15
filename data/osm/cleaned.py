@@ -10,6 +10,9 @@ looked up in "{data_path}/{osm_path}/*.osm.pbf". Then, they are processed:
 - Only highways and railways are kept in the data.
 - The individual data sources are merged together.
 - They are cut based on requested region or department.
+
+Files are then written in the stage cache folder (using osmium writer). 
+Returns: file name "output.osm.gz".
 """
 
 def configure(context):

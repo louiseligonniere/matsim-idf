@@ -7,7 +7,8 @@ working_directory: cache
 # This section defines which parts of the pipeline should be run
 run:
   - synthesis.output # To create the output population in the output_path (see below)
-  - matsim.output # Uncomment, if you want to run the full simulation (you'll need Java for that)
+  - matsim.output # Uncomment, if you want to run the simulation (you'll need Java for that) - only two iterates to test that it works
+ # - matsim.simulation.full_run # To run the full MATSim simulation
 
   - analysis.synthesis.population # Generates tables to compare synthetic population to source data
   - analysis.grid.comparison_flow_volume # Generates grids showing the volumes of the synthetic population (by age group and trip purpose) / 

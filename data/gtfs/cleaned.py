@@ -4,6 +4,8 @@ import os, pathlib
 """
 This file reads GTFS schedules, cuts them to the scenario area (defined by the
 selected regions and departments) and merges them together.
+It writes the files in the stage cache folder.
+Returns: "gtfs"
 """
 
 def configure(context):
