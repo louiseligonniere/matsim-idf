@@ -5,10 +5,12 @@ import pandas as pd
 import geopandas as gpd
 from  analysis.marginals import NUMBER_OF_VEHICLES_LABELS
 from shapely import distance
+
 AGE_CLASS = [0, 10, 14, 17, 24, 49, 64, np.inf]
 NUMBER_OF_VEHICLES= [0,1,2,3,np.inf]
 NAME_AGE_CLASS = ["0-10","11-14","15-17","18-24","25-49","50-64","65+"]
 ANALYSIS_FOLDER = "analysis_population"
+
 def configure(context):
 
     context.config("output_path")
@@ -41,6 +43,7 @@ def get_undirected_purpose(x):
         return "Secondary trip (non link to home)"
 
     return 0
+
 def execute(context):
 
     # check output folder existence
@@ -63,7 +66,8 @@ def execute(context):
     
     # get weight adjust with INSEE population weights
     df_hts_person["person_weight_insee"] =df_hts_person["person_weight"]*(df_census["weight"].sum()/df_hts_person["person_weight"].sum())
-    df_hts_households["household_weight_insee"] = df_hts_households["household_weight"]*(df_census["weight"].sum()/df_hts_households["household_weight"].sum())
+#    df_hts_households["household_weight_insee"] = df_hts_households["household_weight"]*(df_census["weight"].sum()/df_hts_households["household_weight"].sum()) # pb here: we take individual census weights (and not households)
+    
     # get age class
     df_person_eq["age_class"] = pd.cut(df_person_eq["age"],AGE_CLASS,include_lowest=True,labels=NAME_AGE_CLASS)
     df_census["age_class"] = pd.cut(df_census["age"],AGE_CLASS,include_lowest=True,labels=NAME_AGE_CLASS)
@@ -93,8 +97,8 @@ def execute(context):
     analysis_age_class.to_csv(f"{analysis_output_path}/{prefix}age.csv")
 
     # Compare vehicle volume
-    analysis_vehicles_class = pd.concat([df_hts_households.groupby("vehicles_class",observed=False)["household_weight"].sum(),df_hts_households.groupby("vehicles_class",observed=False)["household_weight_insee"].sum(),df_person_eq.groupby("vehicles_class",observed=False)["household_id"].nunique()],axis=1).reset_index()
-    analysis_vehicles_class.columns = ["Number of vehicles class","HTS","HTS adjust with INSEE population weights","EQASIM"]
+    analysis_vehicles_class = pd.concat([df_hts_households.groupby("vehicles_class",observed=False)["household_weight"].sum(),df_person_eq.groupby("vehicles_class",observed=False)["household_id"].nunique()],axis=1).reset_index()
+    analysis_vehicles_class.columns = ["Number of vehicles class","HTS","EQASIM"]
     analysis_vehicles_class["Proportion_HTS"] = analysis_vehicles_class["HTS"] / df_hts_households["household_weight"].sum() 
     analysis_vehicles_class["Proportion_EQASIM"] = analysis_vehicles_class["EQASIM"] / df_person_eq["household_id"].nunique() 
     analysis_vehicles_class["EQASIM"] = analysis_vehicles_class["EQASIM"]/sampling_rate
