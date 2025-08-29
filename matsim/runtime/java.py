@@ -30,7 +30,10 @@ def run(context, entry_point, arguments = [], class_path = None, vm_arguments = 
     vm_arguments = [
         "-Xmx" + memory,
         "-Djava.io.tmpdir=%s" % temp_path,
-        "-Dmatsim.useLocalDtds=true"
+        "-Dmatsim.useLocalDtds=true",
+        "--add-exports=java.base/java.lang=ALL-UNNAMED",
+        "--add-exports=java.desktop/sun.awt=ALL-UNNAMED",
+        "--add-exports=java.desktop/sun.java2d=ALL-UNNAMED"
     ] + vm_arguments
 
     # Prepare classpath

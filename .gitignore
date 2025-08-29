@@ -4,15 +4,22 @@ cache
 output
 .conda
 
-data_sources
-output_treatment
-
 data/nantes_2015
 data/lyon_2015
 .vscode
 .idea
 
 config_local_*.yml
+
+matsim-java
+data_sources
+
+output_treatment/prepare_matsim_analysis/csv
+output_treatment/prepare_matsim_analysis/xml
+output_treatment/prepare_matsim_analysis/tex
+
+output_treatment/simulation_output_analysis/csv
+output_treatment/simulation_output_analysis/xml
 
 # sphinx build files
 docs/_build

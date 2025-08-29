@@ -2,7 +2,7 @@ import subprocess as sp
 import os, shutil
 
 """
-This stage defines the maven run function.
+This stage defines the maven run function, which is used to build a maven project (here: eqasim-java).
 Returns: none (no execute instructions).
 """
 

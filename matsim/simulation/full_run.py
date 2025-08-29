@@ -20,10 +20,13 @@ def configure(context: ConfigurationContext):
 
 
 def execute(context: ExecuteContext):
+
     config_path = "%s/%sconfig.xml" % (
         context.config("output_path"),
         context.config("output_prefix"),
     )
+
+    config_path_full = "C:\VSCodeProjects\matsim-idf-yvelines0.02\output\simulated_config.xml"
 
     force_full_rerun = context.config("force_full_rerun")
     if (
@@ -37,7 +40,7 @@ def execute(context: ExecuteContext):
         "org.eqasim.ile_de_france.RunSimulation",
         [
             "--config-path",
-            config_path,
+            config_path_full,
             "--config:planCalcScore.writeExperiencedPlans",
             "true",
         ],

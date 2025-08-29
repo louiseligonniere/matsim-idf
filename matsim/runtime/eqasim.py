@@ -26,6 +26,7 @@ def configure(context):
     context.config("eqasim_version", DEFAULT_EQASIM_VERSION)
     context.config("eqasim_branch", DEFAULT_EQASIM_BRANCH)
     context.config("eqasim_commit", DEFAULT_EQASIM_COMMIT)
+    context.config("eqasim_tag", None)
     context.config("eqasim_repository", "https://github.com/eqasim-org/eqasim-java.git")
     context.config("eqasim_path", "")
 
@@ -38,6 +39,7 @@ def run(context, command, arguments, cwd = None):
     jar_path = "%s/eqasim-java/ile_de_france/target/ile_de_france-%s.jar" % (
         context.path("matsim.runtime.eqasim"), version
     )
+
     java.run(context, command, arguments, jar_path, cwd=cwd)
 
 def execute(context):
@@ -66,11 +68,14 @@ def execute(context):
         if not os.path.exists("{}/eqasim-java/ile_de_france/target/ile_de_france-{}.jar".format(context.path(), version)):
             raise RuntimeError("The JAR was not created correctly. Wrong eqasim_version specified?")
 
-    # Special case: We provide the jar directly. This is mainly used for
-    # creating input to unit tests of the eqasim-java package.
+    # Special case: we provide a local folder containing the Java code to use for MATSim directly. 
     else:
+        # Build the jar 
+        maven.run(context, ["-Pstandalone", "--projects", "ile_de_france", "--also-make", "package", "-DskipTests=true"],
+                  cwd = context.config("eqasim_path"))
+
         os.makedirs("%s/eqasim-java/ile_de_france/target" % context.path())
-        shutil.copy(context.config("eqasim_path"),
+        shutil.copy("%s/ile_de_france/target/ile_de_france-%s.jar" % (context.config("eqasim_path"), version),
             "%s/eqasim-java/ile_de_france/target/ile_de_france-%s.jar" % (context.path(), version))
 
     return "eqasim-java/ile_de_france/target/ile_de_france-%s.jar" % version
