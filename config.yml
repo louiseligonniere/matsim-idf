@@ -6,10 +6,10 @@ working_directory: cache
 
 # This section defines which parts of the pipeline should be run
 run:
-#  - synthesis.output # To create the synthetic population in the output_path
-#  - matsim.simulation.prepare # To generate config files for the simulation
-#  - matsim.runtime.eqasim # To update the jar according to modifications in RunSimulation.java
-#  - matsim.output # To prepare the simulation (2 iterations) - must be re-run if modifications in RunSimulation.java were made
+  - synthesis.output # To create the synthetic population in the output_path
+  - matsim.simulation.prepare # To generate config files for the simulation
+  - matsim.runtime.eqasim # To update the jar according to modifications in RunSimulation.java
+  - matsim.output # To prepare the simulation (2 iterations) - must be re-run if modifications in RunSimulation.java were made
   - matsim.simulation.full_run # To run the full MATSim simulation
 
 #  - analysis.synthesis.population # Generates tables to compare synthetic population to source data
@@ -29,15 +29,15 @@ config:
   random_seed: 1234
 
   # Zone to study
-  # regions: [11] # (11=IDF)
-  departments: [78] # default=[]
+  regions: [11] # (11=IDF)
+  # departments: [78] # default=[]
 
   # Paths to the input data and where the output should be stored
   data_path: data_sources
   output_path: output
 
   # GTFS path (default=gtfs_idf)
-  gtfs_path: gtfs_idf_double_frequency
+  gtfs_path: gtfs_idf
 
   # Only interesting if you run the simulation
   java_memory: 14G
@@ -59,4 +59,4 @@ config:
   # When running the full MATSim simulation, activate to rerun the simulation even if output already exists
   force_full_rerun: true
 
-  eqasim_path: matsim-java
+  # eqasim_path: matsim-java
