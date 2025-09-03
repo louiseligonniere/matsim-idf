@@ -58,9 +58,10 @@ def execute(context):
         # Select the configured commit or tag
         commit = context.config("eqasim_commit")
 
-        git.run(context, [
-            "checkout", commit
-        ], cwd = "{}/eqasim-java".format(context.path()))
+        if commit != "latest":
+            git.run(context, [
+                "checkout", commit
+            ], cwd = "{}/eqasim-java".format(context.path()))
 
         # Build eqasim
         maven.run(context, ["-Pstandalone", "--projects", "ile_de_france", "--also-make", "package", "-DskipTests=true"], cwd = "%s/eqasim-java" % context.path())

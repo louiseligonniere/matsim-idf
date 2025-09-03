@@ -69,7 +69,7 @@ config:
 
   # When running the MATSim simulation, use to specify the path to a git repo containing the java code
   eqasim_repository: https://github.com/louiseligonniere/eqasim-java
-  eqasim_commit: dd4d240
+  eqasim_commit: latest
   eqasim_version: 2.0.0
 
 
