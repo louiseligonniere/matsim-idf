@@ -35,6 +35,7 @@ def configure(context):
     context.config("sampling_rate")
     context.config("processes")
     context.config("random_seed")
+    context.config("replanning_rate", 0.05)
 
     context.config("output_prefix", "ile_de_france_")
 
@@ -100,6 +101,7 @@ def execute(context):
         "--threads", context.config("processes"),
         "--prefix", context.config("output_prefix"),
         "--random-seed", context.config("random_seed"),
+        "--replanning-rate", context.config("replanning_rate"),
         "--output-path", "generic_config.xml"
     ])
     assert os.path.exists("%s/generic_config.xml" % context.path())

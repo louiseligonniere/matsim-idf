@@ -6,11 +6,13 @@ working_directory: cache
 
 # This section defines which parts of the pipeline should be run
 run:
-  - synthesis.output # To create the synthetic population in the output_path
+#  - synthesis.output # To create the synthetic population in the output_path
+
+  - matsim.runtime.eqasim # To update the jar according to modifications in eqasim-java
   - matsim.simulation.prepare # To generate config files for the simulation
-  - matsim.runtime.eqasim # To update the jar according to modifications in RunSimulation.java
   - matsim.output # To prepare the simulation (2 iterations) - must be re-run if modifications in RunSimulation.java were made
-  - matsim.simulation.full_run # To run the full MATSim simulation
+
+#  - matsim.simulation.full_run # To run the full MATSim simulation
 
 #  - analysis.synthesis.population # Generates tables to compare synthetic population to source data
 #  - analysis.grid.comparison_flow_volume # Generates grids showing the volumes of the synthetic population (by age group and trip purpose) / 
@@ -29,8 +31,8 @@ config:
   random_seed: 1234
 
   # Zone to study
-  regions: [11] # (11=IDF)
-  # departments: [78] # default=[]
+  # regions: [11] # (11=IDF)
+  departments: [78] # default=[]
 
   # Paths to the input data and where the output should be stored
   data_path: data_sources
@@ -59,4 +61,15 @@ config:
   # When running the full MATSim simulation, activate to rerun the simulation even if output already exists
   force_full_rerun: true
 
+  # When running the MATSim simulation, use to specify the rate of agents that consider a new plan (via a discrete mode choice model) in each iteration
+  replanning_rate: 0.9 # default=0.05
+
+  # When running the MATSim simulation, use to specify the path to a local folder containing the java code
   # eqasim_path: matsim-java
+
+  # When running the MATSim simulation, use to specify the path to a git repo containing the java code
+  eqasim_repository: https://github.com/louiseligonniere/eqasim-java
+  eqasim_commit: dd4d240
+  eqasim_version: 2.0.0
+
+

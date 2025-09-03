@@ -40,7 +40,7 @@ def execute(context: ExecuteContext):
         "org.eqasim.ile_de_france.RunSimulation",
         [
             "--config-path",
-            config_path_full,
+            config_path,
             "--config:planCalcScore.writeExperiencedPlans",
             "true",
         ],
