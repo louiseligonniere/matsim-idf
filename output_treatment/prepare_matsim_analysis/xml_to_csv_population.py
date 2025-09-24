@@ -3,14 +3,16 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 
 """
-This module is used to convert the population file outputed by prepare MATSim pipeline, from xml into csv (output_treatment/prepare_matsim_analysis/xml/simulated_population.xml).
+This module is used to convert the population file outputed by prepare MATSim pipeline, from xml into csv (OUTPUT_PATH/extracted_files/simulated_population.xml).
 It uses xml Element tree to convert .xml to .csv and creates three csv files :
-- simulated_population.csv : persons in the population
-- simulated_activities.csv : activities made by the population (plans before matsim simu)
-- simulated_trips.csv : trips made by the population (plans before matsim simu)
+- converted_population.csv : persons in the population
+- converted_activities.csv : activities made by the population (plans before matsim simu)
+- converted_trips.csv : trips made by the population (plans before matsim simu)
 
-Csv files are saved in output_treatment/prepare_matsim_analysis/csv
+Csv files are saved in OUTPUT_PATH/extracted_files
 """
+
+OUTPUT_PATH = "output_treatment/results"
 
 #### POPULATION ####
 
@@ -22,7 +24,7 @@ def xml_to_csv_pop():
     print("Reading population...")
 
     # Parse the XML file
-    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\prepare_matsim_analysis\xml\simulated_population.xml')
+    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\results\extracted_files\simulated_population.xml')
     root = tree.getroot()
         
     # Available variables
@@ -56,7 +58,7 @@ def xml_to_csv_activities():
     """
 
     # Parse the XML file
-    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\prepare_matsim_analysis\xml\simulated_population.xml')
+    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\results\extracted_files\simulated_population.xml')
     root = tree.getroot()
         
     # Empty df for activities
@@ -103,7 +105,7 @@ def xml_to_csv_trips():
     """
 
     # Parse the XML file
-    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\prepare_matsim_analysis\xml\simulated_population.xml')
+    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\results\extracted_files\simulated_population.xml')
     root = tree.getroot()
     
     # Empty df for trips
@@ -177,17 +179,17 @@ def xml_to_csv_trips():
 
 #### CREATE CSV ####
 
-os.makedirs("output_treatment/prepare_matsim_analysis/csv", exist_ok=True)
+os.makedirs("%s/extracted_files" % OUTPUT_PATH, exist_ok=True)
 
 # Population
 df_population = xml_to_csv_pop()
-df_population.to_csv("output_treatment/prepare_matsim_analysis/csv/simulated_population.csv")
+df_population.to_csv("%s/extracted_files/converted_population.csv" % OUTPUT_PATH)
 
 # Activities
 df_activities = xml_to_csv_activities()
-df_activities.to_csv("output_treatment/prepare_matsim_analysis/csv/simulated_activities.csv")
+df_activities.to_csv("%s/extracted_files/converted_activities.csv" % OUTPUT_PATH)
 
 # Trips
 df_trips = xml_to_csv_trips()
-df_trips.to_csv("output_treatment/prepare_matsim_analysis/csv/simulated_trips.csv")
+df_trips.to_csv("%s/extracted_files/converted_trips.csv" % OUTPUT_PATH)
 

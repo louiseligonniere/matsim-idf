@@ -3,14 +3,16 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 
 """
-This module is used to convert the transit schedule file outputed by prepare MATSim pipeline, from xml into csv (output_treatment/prepare_matsim_analysis/xml/simulated_transit_schedule.xml).
+This module is used to convert the transit schedule file outputed by prepare MATSim pipeline, from xml into csv (OUTPUT_PATH/extracted_files/simulated_transit_schedule.xml).
 It uses xml Element tree to convert .xml to .csv and creates three csv files :
-- simulated_transit_lines.csv
-- simulated_transit_routes.csv
-- simulated_departures.csv
+- converted_transit_lines.csv
+- converted_transit_routes.csv
+- converted_departures.csv
 
-Csv files are saved in output_treatment/prepare_matsim_analysis/csv
+Csv files are saved in OUTPUT_PATH/extracted_files
 """
+
+OUTPUT_PATH = "output_treatment/results"
 
 #### TRANSIT LINES ####
 
@@ -22,7 +24,7 @@ def xml_to_csv_transit_lines():
     print("Reading transit lines...")
 
     # Parse the XML file
-    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\prepare_matsim_analysis\xml\simulated_transit_schedule.xml')
+    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\results\extracted_files\simulated_transit_schedule.xml')
     root = tree.getroot()
     
     # Empty df for transit lines
@@ -60,7 +62,7 @@ def xml_to_csv_transit_routes():
     print("Reading transit routes...")
 
     # Parse the XML file
-    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\prepare_matsim_analysis\xml\simulated_transit_schedule.xml')
+    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\results\extracted_files\simulated_transit_schedule.xml')
     root = tree.getroot()
 
     # Empty df for transit routes
@@ -107,7 +109,7 @@ def xml_to_csv_departures():
     print("Reading departures...")
 
     # Parse the XML file
-    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\prepare_matsim_analysis\xml\simulated_transit_schedule.xml')
+    tree = ET.parse(r'C:\VSCodeProjects\matsim-idf0.001\output_treatment\results\extracted_files\simulated_transit_schedule.xml')
     root = tree.getroot()
 
     # Empty df for departures
@@ -153,16 +155,16 @@ def xml_to_csv_departures():
 
 #### CREATE CSV ####
 
-os.makedirs("output_treatment/prepare_matsim_analysis/csv", exist_ok=True)
+os.makedirs("%s/extracted_files" % OUTPUT_PATH, exist_ok=True)
 
 # Transit lines
 df_transit_lines = xml_to_csv_transit_lines()
-df_transit_lines.to_csv("output_treatment/prepare_matsim_analysis/csv/simulated_transit_lines.csv", index=False)
+df_transit_lines.to_csv("%s/extracted_files/converted_transit_lines.csv" % OUTPUT_PATH, index=False)
 
 # Transit routes
 df_transit_routes = xml_to_csv_transit_routes()
-df_transit_routes.to_csv("output_treatment/prepare_matsim_analysis/csv/simulated_transit_routes.csv", index=False)
+df_transit_routes.to_csv("%s/extracted_files/converted_transit_routes.csv" % OUTPUT_PATH, index=False)
 
 # Departures
 df_departures = xml_to_csv_departures()
-df_departures.to_csv("output_treatment/prepare_matsim_analysis/csv/simulated_departures.csv", index=False)
+df_departures.to_csv("%s/extracted_files/converted_departures.csv" % OUTPUT_PATH, index=False)

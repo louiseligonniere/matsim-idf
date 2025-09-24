@@ -1,17 +1,19 @@
 import pandas as pd
 
 """
-This module is used to analyse trips outputed by prepare MATSim pipeline (output_treatment/prepare_matsim_analysis/xml/simulated_population.xml).
-Using the csv files (saved in output_treatment/prepare_matsim_analysis/csv), it produces some 
+This module is used to analyse trips outputed by prepare MATSim pipeline (output_treatment/results/extracted_files/simulated_population.xml).
+Using the csv files (saved in output_treatment/results/extracted_files), it produces some 
 stats on the share of trips (absolute, distance, travel time) made using each mode.
 """
+
+OUTPUT_PATH = "output_treatment/results"
 
 #### USEFUL STATS ####
 
 # Read files
-df_population = pd.read_csv("output_treatment/prepare_matsim_analysis/csv/output_prepare_population.csv")
-df_activities = pd.read_csv("output_treatment/prepare_matsim_analysis/csv/output_prepare_activities.csv")
-df_trips = pd.read_csv("output_treatment/prepare_matsim_analysis/csv/output_prepare_trips.csv")
+df_population = pd.read_csv("%s/extracted_files/converted_population.csv" % OUTPUT_PATH)
+df_activities = pd.read_csv("%s/extracted_files/converted_activities.csv" % OUTPUT_PATH)
+df_trips = pd.read_csv("%s/extracted_files/converted_trips.csv" % OUTPUT_PATH)
 
 ### Trips by detailled mode
 

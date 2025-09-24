@@ -4,11 +4,13 @@ import os
 
 """
 This module is used to decompress .xml.gz files (prepare MATSim, config files). 
-Extracted .xml files are saved in output_treatment/prepare_matsim_analysis/xml.
+Extracted .xml files are saved in OUTPUT_PATH/extracted_files.
 """
 
+OUTPUT_PATH = "output_treatment/results"
+
 # Create output extract folder
-os.makedirs("output_treatment/prepare_matsim_analysis/xml", exist_ok=True)
+os.makedirs("%s/extracted_files" % OUTPUT_PATH, exist_ok=True)
 
 # Iterate on files .xml.gz
 for filename in os.listdir("output"):
@@ -17,7 +19,7 @@ for filename in os.listdir("output"):
         
         # New filename with extension .xml
         output_filename = filename[:-3]
-        output_path = os.path.join("output_treatment/prepare_matsim_analysis/xml", output_filename)
+        output_path = os.path.join(OUTPUT_PATH, "extracted_files", output_filename)
 
         # Decompress the file
         with gzip.open(input_path, 'rb') as f_in:

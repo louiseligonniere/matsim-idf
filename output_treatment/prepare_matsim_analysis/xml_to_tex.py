@@ -11,7 +11,7 @@ to create a simple tree from that .xml.
 """
 
 # File path to adapt
-file_path = r'C:\VSCodeProjects\matsim-idf\output_treatment\prepare_matsim_analysis\xml\simulated_vehicles.xml'
+file_path = r'C:\VSCodeProjects\matsim-idf\output_treatment\results\extracted_files\simulated_vehicles.xml'
 
 # Parse the XML file
 tree = ET.parse(file_path)
@@ -135,11 +135,11 @@ def inspect_elements_and_generate_latex(root, file_path):
     collect(root, root_path)
     print_in_order(root, root_path)
 
-    os.makedirs("output_treatment/prepare_matsim_analysis/tex", exist_ok=True)
+    os.makedirs("output_treatment/results/tex", exist_ok=True)
 
     filename = re.search(r"simulated_(.*?)\.xml", file_path).group(1)
     tex_filename = f"tree_{filename}.tex"
-    tex_path = os.path.join("output_treatment", "prepare_matsim_analysis", "tex", tex_filename)
+    tex_path = os.path.join("output_treatment", "results", "tex", tex_filename)
 
     with open(tex_path, "w", encoding="utf-8") as f:
         f.write("\\dirtree{%\n")
