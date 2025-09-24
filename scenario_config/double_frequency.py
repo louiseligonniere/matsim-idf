@@ -2,19 +2,18 @@ import pandas as pd
 import zipfile
 import os
 
-if not os.path.exists("C:\VSCodeProjects\matsim-idf-yvelines0.05\data_sources\gtfs_idf_double_frequency_ok"):
-    os.makedirs("C:\VSCodeProjects\matsim-idf-yvelines0.05\data_sources\gtfs_idf_double_frequency_ok")
+os.makedirs("C:\VSCodeProjects\matsim-idf-yvelines0.05\data_sources\gtfs_idf_double_frequency_rertransilien", exist_ok=True)
 
 INPUT_ZIP = "data_sources\gtfs_idf\IDFM-gtfs.zip"
-OUTPUT_ZIP = "data_sources\gtfs_idf_double_frequency_ok\IDFM-gtfs.zip"
+OUTPUT_ZIP = "data_sources\gtfs_idf_double_frequency_rertransilien\IDFM-gtfs.zip"
 CHUNK_SIZE = 10240
 NUM_CHUNKS_TRIPS = 47
 NUM_CHUNKS_STOPS = 1060
 DEFAULT_OFFSET = 60 * 60 # default offset to use for routes that have one unique departure (60 minutes)
 
-SELECTED_LINES = [] # to keep all lines
-# SELECTED_LINES = ["A", "B", "C", "D", "E",
-#                   "H", "J", "K", "L", "N", "P", "R", "U", "V"]
+# SELECTED_LINES = [] # to keep all lines
+SELECTED_LINES = ["A", "B", "C", "D", "E",
+                  "H", "J", "K", "L", "N", "P", "R", "U", "V"]
 
 
 def duplicate_trips_chunk(trips_chunk, selected_routes_id):
@@ -47,10 +46,7 @@ def format_timedelta_column(series):
     )
 
 
-def duplicate_stoptimes_chunk(stoptimes_chunk, trips_df, selected_routes_id):
-    # Merge to bring route_id into stoptimes
-    stoptimes_chunk = stoptimes_chunk.merge(trips_df, on="trip_id", how="left")
-
+def duplicate_stoptimes_chunk(stoptimes_chunk, selected_routes_id):
     # Create containers for duplicated rows
     new_stoptimes = []
 
@@ -100,8 +96,6 @@ def duplicate_stoptimes_chunk(stoptimes_chunk, trips_df, selected_routes_id):
 
     # Concatenate original and duplicated data
     duplicated_stoptimes_chunk = pd.concat([stoptimes_chunk] + new_stoptimes, ignore_index=True)
-
-    duplicated_stoptimes_chunk = duplicated_stoptimes_chunk.drop(columns=["route_id"])
 
     return duplicated_stoptimes_chunk
 
@@ -168,14 +162,37 @@ stoptimes_records = []
 with zipfile.ZipFile(INPUT_ZIP, "r") as archive:
     with archive.open("stop_times.txt") as file:
         stoptimes_csv = pd.read_csv(file, dtype = str, chunksize = CHUNK_SIZE)
-        # Duplicate each chunk separately
-        for counter_chunks, stoptimes_chunk in enumerate(stoptimes_csv):
-            duplicated_stoptimes_chunk = duplicate_stoptimes_chunk(stoptimes_chunk, trips_df, selected_routes_id)
 
-            if len(duplicated_stoptimes_chunk) > 0:
-                stoptimes_records.append(duplicated_stoptimes_chunk)
+        # The cut between two chunks can happen inside lines from a same route
+        # To avoid it, we save lines of the last route from each chunk and concatenate it at the beginning of the following chunk
+        last_route = pd.DataFrame()
+
+        # Process each chunk separately
+        for counter_chunks, stoptimes_chunk in enumerate(stoptimes_csv):            
+            # Merge to bring route_id into stoptimes
+            stoptimes_chunk = stoptimes_chunk.merge(trips_df, on="trip_id", how="left")
+
+            # Add previous last route to current chunk
+            stoptimes_chunk_to_fix = pd.concat([last_route, stoptimes_chunk])
+
+            # Save last route from current chunk
+            routes = stoptimes_chunk_to_fix["route_id"].unique()
+            last_id = routes[len(routes)-1]
+            last_route = stoptimes_chunk_to_fix[stoptimes_chunk_to_fix["route_id"] == last_id]
+
+            # Remove last route from current chunk
+            stoptimes_chunk_to_fix = stoptimes_chunk_to_fix[stoptimes_chunk_to_fix["route_id"] != last_id]
+            
+            # Apply the processing function
+            if len(stoptimes_chunk_to_fix)>0:
+                duplicated_stoptimes_chunk = duplicate_stoptimes_chunk(stoptimes_chunk_to_fix, selected_routes_id)
+                stoptimes_records.append(duplicated_stoptimes_chunk.drop(columns=["route_id"]))
             
             print(f"Processed {counter_chunks+1} chunks out of {NUM_CHUNKS_STOPS}")
+        
+        # Process last route from last chunk
+        last_route_fixed = duplicate_stoptimes_chunk(last_route, selected_routes_id)
+        stoptimes_records.append(last_route_fixed.drop(columns=["route_id", "direction_id"]))
 
 # Concatenate chunks into one file
 all_stoptimes = pd.concat(stoptimes_records)
