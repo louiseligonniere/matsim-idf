@@ -15,6 +15,8 @@ config_local_*.yml
 matsim-java
 data_sources
 
+output_treatment/results
+
 *.csv
 *.tex
 *.xml
